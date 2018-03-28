@@ -17,20 +17,22 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Audio> audioList;
+    ArrayList<Audio> libraryAudioList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadAudio();
-
-        AudioAdapter audioAdapter = new AudioAdapter(this, audioList);
-
         ListView listView = (ListView) findViewById(R.id.library_song_list);
 
+        libraryAudioList = loadAudio();
+
+        AudioAdapter audioAdapter = new AudioAdapter(this, libraryAudioList);
+
         listView.setAdapter(audioAdapter);
+        //https://stackoverflow.com/questions/3771568/showing-empty-view-when-listview-is-empty/28188185#28188185
+        listView.setEmptyView(findViewById(R.id.emptyElement));
 
         // register onClickListener to handle click events on each item
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             // argument position gives the index of item which is clicked
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
             {
-                Audio selectedAudio = audioList.get(position);
+                Audio selectedAudio = libraryAudioList.get(position);
                 playMedia(selectedAudio.getData());
             }
         });
@@ -47,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //https://www.sitepoint.com/a-step-by-step-guide-to-building-an-android-audio-player-app/
-    private void loadAudio() {
+    private ArrayList<Audio> loadAudio() {
         ContentResolver contentResolver = getContentResolver();
+        ArrayList<Audio> audioList = new ArrayList<Audio>();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
@@ -56,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = contentResolver.query(uri, null, selection, null, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            audioList = new ArrayList<>();
             while (cursor.moveToNext()) {
                 //https://developer.android.com/reference/android/provider/MediaStore.Audio.AudioColumns.html
                 String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
@@ -71,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
 
+        return audioList;
     }
+
     //https://developer.android.com/guide/components/intents-common.html#Music
     public void playMedia(String file) {
         Intent intent = new Intent();

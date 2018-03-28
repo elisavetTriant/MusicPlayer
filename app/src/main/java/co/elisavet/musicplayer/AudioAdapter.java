@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class AudioAdapter extends ArrayAdapter<Audio> {
 
+    ArrayList<Audio> audioList;
+
     public AudioAdapter(Activity context, ArrayList<Audio> audio){
 
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
@@ -22,6 +24,8 @@ public class AudioAdapter extends ArrayAdapter<Audio> {
         // Because this is a custom adapter for three TextViews, the adapter is not
         // going to use this second argument, so it can be any value. Here, we used 0.
         super(context, 0, audio);
+        audioList = new ArrayList<Audio>(audio);
+
     }
 
     /**
@@ -73,5 +77,11 @@ public class AudioAdapter extends ArrayAdapter<Audio> {
         // Return the whole list item layout (containing 3 TextViews)
         // so that it can be shown in the ListView
         return listItemView;
+    }
+
+    //@Override
+
+    public int getCount() {
+        return audioList.size();
     }
 }

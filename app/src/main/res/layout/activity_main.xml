@@ -22,4 +22,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical" />
 
+    <TextView
+        android:id="@+id/emptyElement"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:text="@string/empty_music_library_message"
+        android:textColor="#525252"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
 </LinearLayout>
