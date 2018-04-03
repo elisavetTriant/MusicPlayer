@@ -56,12 +56,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         //Load Audio and store it in the libraryAudioList ArrayList<Audio>
         libraryAudioList = loadAudio();
-        //Create new custom AudioAdapter and store it in the audioAdapter
+        //Create new custom AudioAdapter instance and store it in the audioAdapter
         AudioAdapter audioAdapter = new AudioAdapter(this, libraryAudioList);
         //Then set the adapter in the listView with the id library_song_list
         listView.setAdapter(audioAdapter);
         //https://stackoverflow.com/questions/3771568/showing-empty-view-when-listview-is-empty/28188185#28188185
-        listView.setEmptyView(findViewById(R.id.emptyElement));
+        listView.setEmptyView(findViewById(R.id.empty_list_element));
 
         // register onClickListener to handle click events on each item
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
