@@ -1,5 +1,7 @@
 package co.elisavet.musicplayer;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Created by Eli on 26-Mar-18.
  * https://www.sitepoint.com/a-step-by-step-guide-to-building-an-android-audio-player-app/
@@ -10,13 +12,17 @@ public class Audio {
     private String data;
     private String title;
     private String album;
+    private String album_id;
+    private String album_art;
     private String artist;
     private String duration;
 
-    public Audio(String data, String title, String album, String artist, String duration) {
+    public Audio(String data, String title, String album, String album_id, String album_art, String artist, String duration) {
         this.data = data;
         this.title = title;
         this.album = album;
+        this.album_id = album_id;
+        this.album_art = album_art;
         this.artist = artist;
         this.duration = duration;
     }
@@ -43,6 +49,22 @@ public class Audio {
 
     public void setAlbum(String album) {
         this.album = album;
+    }
+
+    public String getAlbumId() {
+        return album_id;
+    }
+
+    public void setAlbumId(String album_id) {
+        this.album_id = album_id;
+    }
+
+    public String getAlbumArt() {
+        return album_art;
+    }
+
+    public void setAlbumArt(String album_art) {
+        this.album_art = album_art;
     }
 
     public String getArtist() {

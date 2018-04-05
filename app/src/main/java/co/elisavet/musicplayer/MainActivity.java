@@ -76,26 +76,40 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     //https://www.sitepoint.com/a-step-by-step-guide-to-building-an-android-audio-player-app/
     private ArrayList<Audio> loadAudio() {
         ContentResolver contentResolver = getContentResolver();
-        ArrayList<Audio> audioList = new ArrayList<Audio>();
+        ArrayList<Audio> audioList = new ArrayList<>();
+        String album_art = "";
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
         String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-        Cursor cursor = contentResolver.query(uri, null, selection, null, sortOrder);
+        Cursor music_cursor = contentResolver.query(uri, null, selection, null, sortOrder);
 
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
+        if (music_cursor != null && music_cursor.getCount() > 0) {
+            while (music_cursor.moveToNext()) {
                 //https://developer.android.com/reference/android/provider/MediaStore.Audio.AudioColumns.html
-                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                String data = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+                String title = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                String album = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                String album_id = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                String artist = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String duration = music_cursor.getString(music_cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
+                //https://stackoverflow.com/questions/17573972/how-can-i-display-album-art-using-mediastore-audio-albums-album-art/17574629#17574629
+                Cursor album_cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                        new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                        MediaStore.Audio.Albums._ID+ "=?",
+                        new String[] {String.valueOf(album_id)},
+                        null);
+
+                if (album_cursor != null && album_cursor.getCount()>0) {
+                    album_cursor.moveToFirst();
+                    album_art = album_cursor.getString(album_cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                    album_cursor.close();
+                }
                 // Save to audioList
-                audioList.add(new Audio(data, title, album, artist, duration));
+                audioList.add(new Audio(data, title, album, album_id, album_art, artist, duration));
             }
-            cursor.close();
+            music_cursor.close();
         }
 
         return audioList;
