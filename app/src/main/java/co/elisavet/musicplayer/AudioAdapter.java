@@ -82,8 +82,10 @@ public class AudioAdapter extends ArrayAdapter<Audio> {
         // set this the image
          String album_art_path = currentAudio.getAlbumArt();
          if (album_art_path != null) {
+             //https://developer.android.com/reference/android/graphics/BitmapFactory.html#decodeFile(java.lang.String)
              Bitmap bMap = BitmapFactory.decodeFile(album_art_path);
              if (bMap != null) {
+                 //https://stackoverflow.com/questions/4955268/how-to-set-a-bitmap-from-resource/4955441#4955441
                  albumArtImageView.setImageBitmap(bMap);
              } else {
                  albumArtImageView.setImageResource(R.drawable.default_album_art);
