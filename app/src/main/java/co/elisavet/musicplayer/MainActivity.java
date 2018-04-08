@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
@@ -167,11 +168,14 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     //https://developer.android.com/guide/components/intents-common.html#Music
+    //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed/38858040#38858040
     private void playMedia(String file) {
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         File fileToPlay = new File(file);
-        intent.setDataAndType(Uri.fromFile(fileToPlay), "audio/*");
+        Uri fileToPlayURI = FileProvider.getUriForFile(MainActivity.this, BuildConfig.APPLICATION_ID + ".co.elisavet.musicplayer.provider", fileToPlay);
+        intent.setDataAndType(fileToPlayURI, "audio/*");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
