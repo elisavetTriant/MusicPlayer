@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -13,6 +14,10 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private ArrayList<Audio> libraryAudioList;
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 0;
     private View mLayout;
+    private RecyclerView songListRecyclerView;
+    private AudioAdapter myAudioAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,25 +60,33 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     }
 
     private void displayMusic() {
-        ListView listView = (ListView) findViewById(R.id.library_song_list);
-
+        //https://www.androidhive.info/2016/01/android-working-with-recycler-view/
+        songListRecyclerView = (RecyclerView) findViewById(R.id.library_song_list);
         //Load Audio and store it in the libraryAudioList ArrayList<Audio>
         libraryAudioList = loadAudio();
         //Create new custom AudioAdapter instance and store it in the audioAdapter
-        AudioAdapter audioAdapter = new AudioAdapter(this, libraryAudioList);
-        //Then set the adapter in the listView with the id library_song_list
-        listView.setAdapter(audioAdapter);
-        //https://stackoverflow.com/questions/3771568/showing-empty-view-when-listview-is-empty/28188185#28188185
-        listView.setEmptyView(findViewById(R.id.empty_list_element));
+        myAudioAdapter = new AudioAdapter(libraryAudioList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        songListRecyclerView.setLayoutManager(mLayoutManager);
+        songListRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        songListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        songListRecyclerView.setAdapter(myAudioAdapter);
 
         // register onClickListener to handle click events on each item
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
+        // row click listener
+        songListRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), songListRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
                 Audio selectedAudio = libraryAudioList.get(position);
                 playMedia(selectedAudio.getData());
             }
-        });
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
     }
 
     //https://www.sitepoint.com/a-step-by-step-guide-to-building-an-android-audio-player-app/

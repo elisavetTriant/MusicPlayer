@@ -21,19 +21,10 @@
         android:text="@string/instructions"
         />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/library_song_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
-
-    <TextView
-        android:id="@+id/empty_list_element"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/empty_music_library_message"
-        android:visibility="gone"
-        style="@style/TextViewsLarge"/>
+        android:scrollbars="vertical" />
 
 </LinearLayout>
