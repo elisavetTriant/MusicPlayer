@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">MusicPlayer</string>
-    <string name="artist">Artist</string>
-    <string name="album">Album</string>
+    <string name="app_name">Music Player</string>
+    <string name="artist">Artist:</string>
+    <string name="album">Album:</string>
     <string name="library_music">Music Library</string>
     <string name="empty_music_library_message">No audio files in your Music Library</string>
-    <string name="duration">Duration</string>
+    <string name="duration">Duration:</string>
     <string name="instructions">Tap on the entries to play audio.</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="previous_song_button_label"><![CDATA[|<]]></string>
+    <string name="next_song_button_label"><![CDATA[>|]]></string>
+    <string name="play_button_label"><![CDATA[>]]></string>
 </resources>

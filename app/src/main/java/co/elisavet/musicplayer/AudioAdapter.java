@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -73,6 +74,18 @@ public class AudioAdapter extends ArrayAdapter<Audio> {
         // set this text on the durationTextView TextView
         durationTextView.setText(currentAudio.getDuration());
 
+        // Find the ImageView in the list_item.xml layout with the ID album_art
+        ImageView albumArtImageView = (ImageView) listItemView.findViewById(R.id.album_art);
+        // Get the data from the current Audio object and
+        // set this the image
+        // Check if an image is provided for this word or not
+        if (currentAudio.hasImage()) {
+            // If an image is available, display the provided image based on the resource ID
+            albumArtImageView.setImageResource(currentAudio.getAlbumArtResourceId());
+        } else {
+            // Otherwise set it to default art
+            albumArtImageView.setImageResource(R.drawable.default_album_art);
+        }
 
         // Return the whole list item layout (containing 3 TextViews)
         // so that it can be shown in the ListView
