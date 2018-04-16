@@ -5,6 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by Eli on 14-Apr-18.
  * Follows the Singleton Pattern
+ * Source: https://stackoverflow.com/questions/16517702/singleton-in-android,
+ * https://stackoverflow.com/a/25236059/9132003
+ * https://stackoverflow.com/a/35130842/9132003
  */
 
 public class AudioData {
@@ -56,7 +59,6 @@ public class AudioData {
             audioList.add(new Audio("No Excuses", "No Excuses Single", "Meghan Trainor", "2:32", R.drawable.no_excuses));
             audioList.add(new Audio("Say Something", "Man of the Woods", "Justin Timberlake", "4:39", R.drawable.justin_timberlake_man_of_the_woods));
             audioList.add(new Audio("Savior", "Surviving the Summer", "Iggy Azalea", "3:31"));
-
 
             return audioList;
         }

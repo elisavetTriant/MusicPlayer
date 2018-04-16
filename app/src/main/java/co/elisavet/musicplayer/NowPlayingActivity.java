@@ -1,5 +1,6 @@
 package co.elisavet.musicplayer;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,34 +15,40 @@ public class NowPlayingActivity extends AppCompatActivity {
     private TextView albumTextView;
     private TextView artistTextView;
     private TextView durationTextView;
+    private TextView backToPreviousActivityTextView;
     private ImageView albumArtImageView;
     private Button nextSongButton;
     private Button previousSongButton;
     private Button playPauseButton;
     private int currentlyPlayingAudioListPosition;
     private Audio currentlyPlayingAudio;
+    private boolean nowPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
 
-        // Find the TextView in the list_item.xml layout with the ID title
+        // Find the TextView in the activity_now_playing.xml layout with the ID back_to_previous_activity
+        backToPreviousActivityTextView = (TextView) findViewById(R.id.back_to_previous_activity);
+        // Find the TextView in the activity_now_playing.xml layout with the ID title
         titleTextView = (TextView) findViewById(R.id.title);
-        // Find the TextView in the list_item.xml layout with the ID album
+        // Find the TextView in the activity_now_playing.xml layout with the ID album
         albumTextView = (TextView) findViewById(R.id.album);
-        // Find the TextView in the list_item.xml layout with the ID artist
+        // Find the TextView in the activity_now_playing.xml layout with the ID artist
         artistTextView = (TextView) findViewById(R.id.artist);
-        // Find the TextView in the list_item.xml layout with the ID duration
+        // Find the TextView in the activity_now_playing.xml layout with the ID duration
         durationTextView = (TextView) findViewById(R.id.duration);
-        // Find the ImageView in the list_item.xml layout with the ID album_art
+        // Find the ImageView in the activity_now_playing.xml layout with the ID album_art
         albumArtImageView = (ImageView) findViewById(R.id.album_art);
-        // Find the ImageView in the list_item.xml layout with the ID album_art
+        // Find the Button in the activity_now_playing.xml layout with the ID next_song_button
         nextSongButton = (Button) findViewById(R.id.next_song_button);
-        // Find the ImageView in the list_item.xml layout with the ID album_art
+        // Find the Button in the activity_now_playing.xml layout with the ID previous_song_button
         previousSongButton = (Button) findViewById(R.id.previous_song_button);
+        // Find the Button in the activity_now_playing.xml layout with the ID play_pause_button
+        playPauseButton = (Button) findViewById(R.id.play_pause_button);
 
-        //if we are coming from the Library Activity with an intent
+        //We are coming from the Library Activity with an intent
         if(getIntent().getExtras() != null) {
             currentlyPlayingAudioListPosition = getIntent().getExtras().getInt("POSITION");
             AudioData.getInstance().setCurrentPosition(currentlyPlayingAudioListPosition);
@@ -86,10 +93,36 @@ public class NowPlayingActivity extends AppCompatActivity {
                 playMusic();
             }
         });
+
+        // Set a click listener on that View
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            // The code in this method will be executed when the next song button is clicked on.
+            @Override
+            public void onClick(View view) {
+                if (nowPlaying){
+                    //Pause
+                    pauseMusic();
+                } else {
+                    //Play
+                    playMusic();
+                }
+            }
+        });
+
+        backToPreviousActivityTextView.setOnClickListener(new View.OnClickListener() {
+            // The code in this method will be executed when the backToPreviousActivityTextView is clicked on.
+            @Override
+            public void onClick(View view) {
+                // Create a new intent to open the {@link NumbersActivity}
+                Intent libraryIntent = new Intent(NowPlayingActivity.this, MainActivity.class);
+                // Start the new activity
+                startActivity(libraryIntent);
+            }
+        });
     }
 
     private void updateUI(){
-        
+
         Audio audioToShow = AudioData.getInstance().getCurrentAudio();
 
         // Get the data from the current Audio object and
@@ -121,6 +154,13 @@ public class NowPlayingActivity extends AppCompatActivity {
     }
 
     private void playMusic() {
-        Toast.makeText(getApplicationContext(), "Currently playing " +  AudioData.getInstance().getCurrentAudio().getTitle(), Toast.LENGTH_SHORT).show();
+        nowPlaying = true;
+        playPauseButton.setText(R.string.play_button_label_pause);
+        Toast.makeText(getApplicationContext(), getString(R.string.now_playing_song, AudioData.getInstance().getCurrentAudio().getTitle()), Toast.LENGTH_SHORT).show();
+    }
+
+    private void pauseMusic() {
+        nowPlaying = false;
+        playPauseButton.setText(getString(R.string.play_button_label_play));
     }
 }
