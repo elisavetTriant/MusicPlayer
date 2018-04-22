@@ -2,7 +2,7 @@
 
 ## Musical Structure App
 
-The Musical Structure App was made as an assignment to practice creating User Interfaces for Android at Udacity's Android Basics by Google Nanodegree Program 2018
+The Musical Structure App was made as an assignment to practice creating User Interfaces for Android and Multi-Screen Apps at Udacity's Android Basics by Google Nanodegree Program 2018
 
 The goal was to design and layout the flow for the structure of a Music Player app using Intents, New Activities, Arraylists, Loops and Custom Classes.
 
